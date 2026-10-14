@@ -252,7 +252,10 @@
       button.disabled = true;
 
       try {
-        const response = await fetch(API, { cache: "no-store" });
+        const response = await fetch(
+  `${API}?_=${Date.now()}`,
+  { cache: "no-store" }
+  };
 
         if (!response.ok) {
           throw new Error(`API returned HTTP ${response.status}`);
