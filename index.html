@@ -1,96 +1,333 @@
+```html
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101713">
-  <title>SMPea | Server Status | Main IP = spectral-meat.tun.ply.gg</title>
+  <title>SMPea | Minecraft Server Status</title>
   <style>
-    :root { color-scheme: dark; --bg:#101713; --panel:#19231d; --line:#2b3b30; --text:#edf6ee; --muted:#a8b9aa; --green:#72e59a; --red:#ff7777; }
-    * { box-sizing:border-box; }
-    body { margin:0; min-height:100vh; padding:28px 16px; display:grid; place-items:center; background:radial-gradient(ellipse at top,#203729 0%,var(--bg) 58%); color:var(--text); font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif; }
-    main { width:min(100%,680px); }
-    .brand { display:flex; align-items:center; gap:14px; margin-bottom:22px; }
-    .cube { width:54px;height:54px;display:grid;place-items:center;background:#427c45;border:3px solid #6aa85e;border-radius:12px;font-size:27px;box-shadow:inset 0 -7px #315e35; }
-    h1 { margin:0; font-size:clamp(1.6rem,5vw,2.2rem); letter-spacing:-.03em; }
-    .sub { color:var(--muted); margin:3px 0 0; }
-    .card { background:rgba(25,35,29,.96); border:1px solid var(--line); border-radius:18px; padding:22px; box-shadow:0 18px 60px #0003; }
-    .statusline { display:flex; align-items:center; justify-content:space-between; gap:12px; padding-bottom:18px; border-bottom:1px solid var(--line); }
-    .statuslabel { color:var(--muted); font-size:.9rem; }
-    .pill { border-radius:999px; padding:7px 12px; font-weight:750; font-size:.86rem; background:#27352b; color:var(--muted); }
-    .pill.online { background:#173d28; color:var(--green); }
-    .pill.offline { background:#451f23; color:var(--red); }
-    .stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:18px 0; }
-    .stat { min-width:0; padding:15px; background:#111a14; border:1px solid var(--line); border-radius:12px; }
-    .stat span { display:block; color:var(--muted); font-size:.82rem; margin-bottom:6px; }
-    .stat strong { display:block; font-size:clamp(1.05rem,3.6vw,1.45rem); overflow-wrap:anywhere; }
-    .motd { border:1px solid var(--line); border-radius:12px; padding:13px 15px; color:#d7e5d9; background:#141e17; overflow-wrap:anywhere; }
-    .footer { display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; margin-top:16px; color:var(--muted); font-size:.82rem; }
-    button { background:#315e3a; color:white; border:1px solid #4c8756; padding:8px 12px; border-radius:9px; font:inherit; cursor:pointer; }
-    button:hover { background:#3a7045; }
-    @media(max-width:470px) { .card{padding:16px}.stats{gap:7px}.stat{padding:10px}.statusline{align-items:flex-start} }
+    :root {
+      color-scheme: dark;
+      --bg: #101713;
+      --panel: #19231d;
+      --line: #2b3b30;
+      --text: #edf6ee;
+      --muted: #a8b9aa;
+      --green: #72e59a;
+      --red: #ff7777;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 28px 16px;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(ellipse at top, #203729 0%, var(--bg) 58%);
+      color: var(--text);
+      font: 16px/1.5 system-ui, -apple-system, Segoe UI, sans-serif;
+    }
+
+    main { width: min(100%, 680px); }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
     .logo {
-  width: 54px;
-  height: 54px;
-  object-fit: contain;
-  border-radius: 12px;
-}
+      width: 54px;
+      height: 54px;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
+      letter-spacing: -.03em;
+    }
+
+    .sub { color: var(--muted); margin: 3px 0 0; }
+
+    .card {
+      background: rgba(25, 35, 29, .96);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 18px 60px #0003;
+    }
+
+    .statusline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .statuslabel { color: var(--muted); font-size: .9rem; }
+
+    .pill {
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-weight: 750;
+      font-size: .86rem;
+      background: #27352b;
+      color: var(--muted);
+    }
+
+    .pill.online { background: #173d28; color: var(--green); }
+    .pill.offline { background: #451f23; color: var(--red); }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .stat {
+      min-width: 0;
+      padding: 15px;
+      background: #111a14;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: .82rem;
+      margin-bottom: 6px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: clamp(1.05rem, 3.6vw, 1.45rem);
+      overflow-wrap: anywhere;
+    }
+
+    .motd {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 13px 15px;
+      color: #d7e5d9;
+      background: #141e17;
+      overflow-wrap: anywhere;
+      white-space: pre-line;
+    }
+
+    .footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    button {
+      background: #315e3a;
+      color: white;
+      border: 1px solid #4c8756;
+      padding: 8px 12px;
+      border-radius: 9px;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    button:hover { background: #3a7045; }
+    button:disabled { opacity: .6; cursor: wait; }
+
+    @media (max-width: 470px) {
+      .card { padding: 16px; }
+      .stats { gap: 7px; }
+      .stat { padding: 10px; }
+      .statusline { align-items: flex-start; }
+    }
   </style>
 </head>
 <body>
   <main>
     <header class="brand">
-      <img
-      class="logo"
-      src="/logo.png"
-      alt="SMPea logo"
-    >
+      <img class="logo" id="serverLogo" src="./logo.png" alt="SMPea logo">
       <div>
         <h1>SMPea</h1>
         <p class="sub">SMPea Server Status</p>
       </div>
     </header>
+
     <section class="card" aria-live="polite">
-      <div class="statusline"><div><div class="statuslabel">Current status</div><strong id="statusText">Checking server…</strong></div><span id="pill" class="pill">CHECKING</span></div>
-      <div class="stats">
-        <div class="stat"><span>Players online</span><strong id="players">—</strong></div>
-        <div class="stat"><span>Version</span><strong id="version">—</strong></div>
-        <div class="stat"><span>Latency</span><strong id="latency">—</strong></div>
+      <div class="statusline">
+        <div>
+          <div class="statuslabel">Current status</div>
+          <strong id="statusText">Checking server…</strong>
+        </div>
+        <span id="pill" class="pill">CHECKING</span>
       </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span>Players online</span>
+          <strong id="players">—</strong>
+        </div>
+        <div class="stat">
+          <span>Version</span>
+          <strong id="version">—</strong>
+        </div>
+        <div class="stat">
+          <span>Latency</span>
+          <strong id="latency">—</strong>
+        </div>
+      </div>
+
       <div class="statuslabel" style="margin-bottom:7px">Server message</div>
       <div class="motd" id="motd">Waiting for status…</div>
-      <div class="footer"><span id="updated">Not checked yet</span><button id="refresh" type="button">Refresh status</button></div>
+
+      <div class="footer">
+        <span id="updated">Not checked yet</span>
+        <button id="refresh" type="button">Refresh status</button>
+      </div>
     </section>
-    <p class="sub" style="text-align:center;font-size:.85rem;margin-top:16px">Status refreshes automatically every 15 seconds.</p>
+
+    <p class="sub" style="text-align:center;font-size:.85rem;margin-top:16px">
+      Status refreshes automatically every 30 seconds.
+    </p>
   </main>
-<script>
-const el = id => document.getElementById(id);
-function safeText(value, fallback='—') { return value === null || value === undefined || value === '' ? fallback : String(value); }
-async function refreshStatus() {
-  el('refresh').disabled = true;
-  try {
-    const response = await fetch('/api/status', { cache: 'no-store' });
-    if (!response.ok) throw new Error('Status request failed');
-    const data = await response.json();
-    const pill = el('pill');
-    pill.className = 'pill ' + (data.online ? 'online' : 'offline');
-    pill.textContent = data.online ? 'ONLINE' : 'OFFLINE';
-    el('statusText').textContent = data.online ? 'Server is reachable' : 'Server is not responding';
-    el('players').textContent = data.online ? `${data.players_online}/${data.players_max}` : '0/—';
-    el('version').textContent = data.online ? safeText(data.version) : '—';
-    el('latency').textContent = data.online ? `${data.latency_ms} ms` : '—';
-    el('motd').textContent = data.online ? safeText(data.motd, 'No server message') : 'The server may be stopped, starting, or using a different port.';
-    el('updated').textContent = 'Last checked: ' + new Date(data.checked_at * 1000).toLocaleTimeString();
-  } catch (error) {
-    el('statusText').textContent = 'Status check failed';
-    el('pill').className = 'pill offline';
-    el('pill').textContent = 'ERROR';
-    el('motd').textContent = 'Could not reach the server. The server be down.';
-  } finally { el('refresh').disabled = false; }
-}
-el('refresh').addEventListener('click', refreshStatus);
-refreshStatus();
-setInterval(refreshStatus, 15000);
-</script>
+
+  <script>
+    const el = id => document.getElementById(id);
+
+    // Public Minecraft status API.
+    const API =
+      "https://mc-api.io/server/JAVA/spectral-meat.tun.ply.gg";
+
+    // Put both image files in the repository root.
+    const DEFAULT_LOGO = "./logo.png";
+    const EVENT_LOGO = "./halloween.png";
+
+    // Change this to the exact special line in your server MOTD.
+    const SPECIAL_MOTD_LINE = "EVENT: HALLOWEEN";
+
+    function safeText(value, fallback = "—") {
+      return value === null || value === undefined || value === ""
+        ? fallback
+        : String(value);
+    }
+
+    function updateLogo(motd) {
+      const lines = String(motd ?? "")
+        .split(/\r?\n/)
+        .map(line => line.trim());
+
+      const isSpecialEvent = lines.some(
+        line => line === SPECIAL_MOTD_LINE
+      );
+
+      const logo = el("serverLogo");
+      const newSrc = isSpecialEvent ? EVENT_LOGO : DEFAULT_LOGO;
+
+      if (logo.getAttribute("src") !== newSrc) {
+        logo.src = newSrc;
+      }
+
+      // If the chosen image is missing, fall back to the default.
+      logo.onerror = () => {
+        if (logo.getAttribute("src") !== DEFAULT_LOGO) {
+          logo.onerror = null;
+          logo.src = DEFAULT_LOGO;
+        }
+      };
+    }
+
+    async function refreshStatus() {
+      const button = el("refresh");
+      button.disabled = true;
+
+      try {
+        const response = await fetch(API, { cache: "no-store" });
+
+        if (!response.ok) {
+          throw new Error(`API returned HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("SMPea API response:", data);
+
+        // Accommodate common API field names.
+        const online = data.online === true;
+        const playersOnline =
+          data.onlinePlayers ?? data.players?.online ?? 0;
+        const playersMax =
+          data.maxPlayers ?? data.players?.max ?? "—";
+        const version = data.version ?? data.software ?? "Unknown";
+        const latency = data.ping ?? data.latency ?? null;
+
+        const rawMotd = data.motd;
+        const motd = Array.isArray(rawMotd)
+          ? rawMotd.join("\n")
+          : typeof rawMotd === "object" && rawMotd !== null
+            ? (rawMotd.clean ?? rawMotd.html ?? "")
+            : (rawMotd ?? "");
+
+        const pill = el("pill");
+        pill.className = "pill " + (online ? "online" : "offline");
+        pill.textContent = online ? "ONLINE" : "OFFLINE";
+
+        el("statusText").textContent = online
+          ? "Server is reachable"
+          : "Server is not responding";
+
+        el("players").textContent = online
+          ? `${playersOnline} / ${playersMax}`
+          : "0 / —";
+
+        el("version").textContent = online
+          ? safeText(version)
+          : "—";
+
+        el("latency").textContent =
+          online && latency !== null
+            ? `${latency} ms`
+            : "—";
+
+        el("motd").textContent = online
+          ? safeText(motd, "No server message")
+          : "The server may be stopped or temporarily unreachable.";
+
+        updateLogo(motd);
+
+        el("updated").textContent =
+          "Last checked: " + new Date().toLocaleTimeString();
+
+      } catch (error) {
+        console.error("SMPea status error:", error);
+
+        el("statusText").textContent = "Status check failed";
+        el("pill").className = "pill offline";
+        el("pill").textContent = "ERROR";
+        el("motd").textContent =
+          "Could not retrieve server status. Check the API or browser console.";
+
+        el("updated").textContent =
+          "Failed at: " + new Date().toLocaleTimeString();
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    el("refresh").addEventListener("click", refreshStatus);
+    refreshStatus();
+    setInterval(refreshStatus, 30000);
+  </script>
 </body>
 </html>
+```
