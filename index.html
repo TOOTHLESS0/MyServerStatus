@@ -83,8 +83,20 @@
       color: var(--muted);
     }
 
-    .pill.online { background: #173d28; color: var(--green); }
-    .pill.offline { background: #451f23; color: var(--red); }
+    .pill.online {
+      background: #173d28;
+      color: var(--green);
+    }
+
+    .pill.offline {
+      background: #451f23;
+      color: var(--red);
+    }
+
+    .pill.maintenance {
+      background: #493b12;
+      color: #ffdf55;
+    }
 
     .stats {
       display: grid;
@@ -207,13 +219,12 @@
   <script>
     const el = id => document.getElementById(id);
 
-    // Public Playit address and port.
     const API =
       "https://api.mcstatus.io/v2/status/java/spectral-meat.tun.ply.gg:11040";
 
     const DEFAULT_LOGO = "./logo.png";
     const EVENT_LOGO = "./repair.png";
-    const SPECIAL_MOTD_LINE = "§c§lServer is under repairs!";
+    const SPECIAL_MOTD_LINE = "Server is under repairs!";
 
     function safeText(value, fallback = "—") {
       return value === null || value === undefined || value === ""
@@ -221,7 +232,7 @@
         : String(value);
     }
 
-    // Remove Minecraft formatting codes before comparing MOTD text.
+    // Strip Minecraft formatting codes before comparing text.
     function cleanMinecraftText(value) {
       return String(value ?? "")
         .replace(/§[0-9a-fk-or]/gi, "")
@@ -229,23 +240,14 @@
         .trim();
     }
 
-    function updateLogo(motd) {
-      const lines = String(motd ?? "")
-        .split(/\r?\n/)
-        .map(cleanMinecraftText);
-
-      const specialLine = cleanMinecraftText(SPECIAL_MOTD_LINE);
-      const useRepairLogo = lines.some(
-        line => line === specialLine
-      );
-
+    function updateLogo(motd, maintenance) {
       const logo = el("serverLogo");
-      const newSrc = useRepairLogo ? EVENT_LOGO : DEFAULT_LOGO;
+      const newSrc = maintenance ? EVENT_LOGO : DEFAULT_LOGO;
 
       if (logo.getAttribute("src") !== newSrc) {
         logo.onerror = () => {
           logo.onerror = null;
-          if (logo.getAttribute("src") !== DEFAULT_LOGO) {
+          if (newSrc !== DEFAULT_LOGO) {
             logo.src = DEFAULT_LOGO;
           }
         };
@@ -258,7 +260,6 @@
       button.disabled = true;
 
       try {
-        // Fixed syntax. The cache-buster prevents browser-side caching.
         const response = await fetch(
           `${API}?_=${Date.now()}`,
           { cache: "no-store" }
@@ -272,12 +273,15 @@
         console.log("SMPea API response:", data);
 
         const online = data.online === true;
+
         const playersOnline = data.players?.online ?? 0;
         const playersMax = data.players?.max ?? "—";
+
         const version =
           data.version?.name_clean ??
           data.version?.name ??
           "Unknown";
+
         const latency = data.latency ?? null;
 
         const rawMotd =
@@ -289,31 +293,61 @@
           ? rawMotd.join("\n")
           : String(rawMotd);
 
-        const pill = el("pill");
-        pill.className = "pill " + (online ? "online" : "offline");
-        pill.textContent = online ? "ONLINE" : "OFFLINE";
+        // Compare the visible MOTD text, ignoring formatting codes.
+        const lines = cleanMinecraftText(motd)
+          .split(/\r?\n/)
+          .map(line => line.trim());
 
-        el("statusText").textContent = online
-          ? "Server is reachable"
-          : "Server is offline or unreachable";
+        const maintenanceLine =
+          cleanMinecraftText(SPECIAL_MOTD_LINE);
+
+        const maintenance = lines.some(
+          line => line === maintenanceLine
+        );
+
+        const pill = el("pill");
+
+        if (maintenance && online) {
+          // Maintenance takes priority over normal ONLINE status.
+          pill.className = "pill maintenance";
+          pill.textContent = "MAINTENANCE";
+
+          el("statusText").textContent =
+            "This Server Is Under Repairs";
+
+          el("motd").textContent = motd;
+
+        } else if (online) {
+          pill.className = "pill online";
+          pill.textContent = "ONLINE";
+
+          el("statusText").textContent =
+            "Server is reachable";
+
+          el("motd").textContent =
+            safeText(motd, "No server message");
+
+        } else {
+          pill.className = "pill offline";
+          pill.textContent = "OFFLINE";
+
+          el("statusText").textContent =
+            "Server is offline or unreachable";
+
+          el("motd").textContent =
+            "The server may be stopped or temporarily unreachable.";
+        }
 
         el("players").textContent =
-          `${playersOnline} / ${playersMax}`;
+          online ? `${playersOnline} / ${playersMax}` : "0 / —";
 
-        el("version").textContent = online
-          ? safeText(version)
-          : "—";
+        el("version").textContent =
+          online ? safeText(version) : "—";
 
         el("latency").textContent =
-          online && latency !== null
-            ? `${latency} ms`
-            : "—";
+          online && latency !== null ? `${latency} ms` : "—";
 
-        el("motd").textContent = online
-          ? safeText(motd, "No server message")
-          : "The server may be stopped or temporarily unreachable.";
-
-        updateLogo(motd);
+        updateLogo(motd, maintenance && online);
 
         el("updated").textContent =
           "Last checked: " + new Date().toLocaleTimeString();
@@ -327,8 +361,12 @@
         el("motd").textContent =
           "Could not retrieve status. Check the API and browser console.";
 
+        // A failed request is not proof that maintenance is active.
+        updateLogo("", false);
+
         el("updated").textContent =
           "Failed at: " + new Date().toLocaleTimeString();
+
       } finally {
         button.disabled = false;
       }
