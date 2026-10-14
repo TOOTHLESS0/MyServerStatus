@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101713">
   <title>SMPea | Minecraft Server Status</title>
+
   <style>
     :root {
       color-scheme: dark;
@@ -154,6 +155,7 @@
     }
   </style>
 </head>
+
 <body>
   <main>
     <header class="brand">
@@ -205,16 +207,13 @@
   <script>
     const el = id => document.getElementById(id);
 
-    // Public Minecraft status API.
+    // Public Playit address and port.
     const API =
-      "https://mc-api.io/server/JAVA/spectral-meat.tun.ply.gg";
+      "https://api.mcstatus.io/v2/status/java/spectral-meat.tun.ply.gg:11040";
 
-    // Put both image files in the repository root.
     const DEFAULT_LOGO = "./logo.png";
-    const EVENT_LOGO = "./halloween.png";
-
-    // Change this to the exact special line in your server MOTD.
-    const SPECIAL_MOTD_LINE = "EVENT: HALLOWEEN";
+    const EVENT_LOGO = "./repair.png";
+    const SPECIAL_MOTD_LINE = "§c§lServer is under repairs!";
 
     function safeText(value, fallback = "—") {
       return value === null || value === undefined || value === ""
@@ -222,29 +221,36 @@
         : String(value);
     }
 
+    // Remove Minecraft formatting codes before comparing MOTD text.
+    function cleanMinecraftText(value) {
+      return String(value ?? "")
+        .replace(/§[0-9a-fk-or]/gi, "")
+        .replace(/&[0-9a-fk-or]/gi, "")
+        .trim();
+    }
+
     function updateLogo(motd) {
       const lines = String(motd ?? "")
         .split(/\r?\n/)
-        .map(line => line.trim());
+        .map(cleanMinecraftText);
 
-      const isSpecialEvent = lines.some(
-        line => line === SPECIAL_MOTD_LINE
+      const specialLine = cleanMinecraftText(SPECIAL_MOTD_LINE);
+      const useRepairLogo = lines.some(
+        line => line === specialLine
       );
 
       const logo = el("serverLogo");
-      const newSrc = isSpecialEvent ? EVENT_LOGO : DEFAULT_LOGO;
+      const newSrc = useRepairLogo ? EVENT_LOGO : DEFAULT_LOGO;
 
       if (logo.getAttribute("src") !== newSrc) {
+        logo.onerror = () => {
+          logo.onerror = null;
+          if (logo.getAttribute("src") !== DEFAULT_LOGO) {
+            logo.src = DEFAULT_LOGO;
+          }
+        };
         logo.src = newSrc;
       }
-
-      // If the chosen image is missing, fall back to the default.
-      logo.onerror = () => {
-        if (logo.getAttribute("src") !== DEFAULT_LOGO) {
-          logo.onerror = null;
-          logo.src = DEFAULT_LOGO;
-        }
-      };
     }
 
     async function refreshStatus() {
@@ -252,10 +258,11 @@
       button.disabled = true;
 
       try {
+        // Fixed syntax. The cache-buster prevents browser-side caching.
         const response = await fetch(
-  `${API}?_=${Date.now()}`,
-  { cache: "no-store" }
-  };
+          `${API}?_=${Date.now()}`,
+          { cache: "no-store" }
+        );
 
         if (!response.ok) {
           throw new Error(`API returned HTTP ${response.status}`);
@@ -264,21 +271,23 @@
         const data = await response.json();
         console.log("SMPea API response:", data);
 
-        // Accommodate common API field names.
         const online = data.online === true;
-        const playersOnline =
-          data.onlinePlayers ?? data.players?.online ?? 0;
-        const playersMax =
-          data.maxPlayers ?? data.players?.max ?? "—";
-        const version = data.version ?? data.software ?? "Unknown";
-        const latency = data.ping ?? data.latency ?? null;
+        const playersOnline = data.players?.online ?? 0;
+        const playersMax = data.players?.max ?? "—";
+        const version =
+          data.version?.name_clean ??
+          data.version?.name ??
+          "Unknown";
+        const latency = data.latency ?? null;
 
-        const rawMotd = data.motd;
+        const rawMotd =
+          data.motd?.clean ??
+          data.motd?.raw ??
+          "";
+
         const motd = Array.isArray(rawMotd)
           ? rawMotd.join("\n")
-          : typeof rawMotd === "object" && rawMotd !== null
-            ? (rawMotd.clean ?? rawMotd.html ?? "")
-            : (rawMotd ?? "");
+          : String(rawMotd);
 
         const pill = el("pill");
         pill.className = "pill " + (online ? "online" : "offline");
@@ -286,11 +295,10 @@
 
         el("statusText").textContent = online
           ? "Server is reachable"
-          : "Server is not responding";
+          : "Server is offline or unreachable";
 
-        el("players").textContent = online
-          ? `${playersOnline} / ${playersMax}`
-          : "0 / —";
+        el("players").textContent =
+          `${playersOnline} / ${playersMax}`;
 
         el("version").textContent = online
           ? safeText(version)
@@ -317,7 +325,7 @@
         el("pill").className = "pill offline";
         el("pill").textContent = "ERROR";
         el("motd").textContent =
-          "Could not retrieve server status. Check the API or browser console.";
+          "Could not retrieve status. Check the API and browser console.";
 
         el("updated").textContent =
           "Failed at: " + new Date().toLocaleTimeString();
