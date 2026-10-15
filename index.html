@@ -1,380 +1,57 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101713">
-  <title>SMPea | Minecraft Server Status</title>
-
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #101713;
-      --panel: #19231d;
-      --line: #2b3b30;
-      --text: #edf6ee;
-      --muted: #a8b9aa;
-      --green: #72e59a;
-      --red: #ff7777;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      padding: 28px 16px;
-      display: grid;
-      place-items: center;
-      background: radial-gradient(ellipse at top, #203729 0%, var(--bg) 58%);
-      color: var(--text);
-      font: 16px/1.5 system-ui, -apple-system, Segoe UI, sans-serif;
-    }
-
-    main { width: min(100%, 680px); }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 22px;
-    }
-
-    .logo {
-      width: 54px;
-      height: 54px;
-      object-fit: contain;
-      border-radius: 12px;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(1.6rem, 5vw, 2.2rem);
-      letter-spacing: -.03em;
-    }
-
-    .sub { color: var(--muted); margin: 3px 0 0; }
-
-    .card {
-      background: rgba(25, 35, 29, .96);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 22px;
-      box-shadow: 0 18px 60px #0003;
-    }
-
-    .statusline {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding-bottom: 18px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .statuslabel { color: var(--muted); font-size: .9rem; }
-
-    .pill {
-      border-radius: 999px;
-      padding: 7px 12px;
-      font-weight: 750;
-      font-size: .86rem;
-      background: #27352b;
-      color: var(--muted);
-    }
-
-    .pill.online {
-      background: #173d28;
-      color: var(--green);
-    }
-
-    .pill.offline {
-      background: #451f23;
-      color: var(--red);
-    }
-
-    .pill.maintenance {
-      background: #493b12;
-      color: #ffdf55;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin: 18px 0;
-    }
-
-    .stat {
-      min-width: 0;
-      padding: 15px;
-      background: #111a14;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-    }
-
-    .stat span {
-      display: block;
-      color: var(--muted);
-      font-size: .82rem;
-      margin-bottom: 6px;
-    }
-
-    .stat strong {
-      display: block;
-      font-size: clamp(1.05rem, 3.6vw, 1.45rem);
-      overflow-wrap: anywhere;
-    }
-
-    .motd {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 13px 15px;
-      color: #d7e5d9;
-      background: #141e17;
-      overflow-wrap: anywhere;
-      white-space: pre-line;
-    }
-
-    .footer {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 8px;
-      margin-top: 16px;
-      color: var(--muted);
-      font-size: .82rem;
-    }
-
-    button {
-      background: #315e3a;
-      color: white;
-      border: 1px solid #4c8756;
-      padding: 8px 12px;
-      border-radius: 9px;
-      font: inherit;
-      cursor: pointer;
-    }
-
-    button:hover { background: #3a7045; }
-    button:disabled { opacity: .6; cursor: wait; }
-
-    @media (max-width: 470px) {
-      .card { padding: 16px; }
-      .stats { gap: 7px; }
-      .stat { padding: 10px; }
-      .statusline { align-items: flex-start; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07130f">
+<title>SMPea | Minecraft Server Status</title>
+<style>
+:root{color-scheme:dark;--page:#07130f;--panel:#0d2119;--border:#244b38;--text:#edf8f0;--muted:#a4bdad;--green:#4ade80;--green-bg:#123d27;--red:#f87171;--red-bg:#421d20;--yellow:#facc15;--yellow-bg:#433712}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,rgba(39,112,72,.20),transparent 48%),var(--page);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.shell{width:min(1040px,calc(100% - 32px));margin:0 auto;padding:38px 0 56px}header{display:flex;align-items:center;gap:16px;margin-bottom:30px}.brand-logo{width:62px;height:62px;object-fit:contain;border-radius:16px;background:#10281d;border:1px solid var(--border);padding:7px}
+h1{font-size:clamp(1.7rem,4vw,2.4rem);line-height:1.1;margin:0;letter-spacing:-.04em}.subtitle{margin:7px 0 0;color:var(--muted);font-size:.98rem}
+.server-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.server-card{min-width:0;background:linear-gradient(160deg,rgba(18,45,32,.98),rgba(10,27,20,.98));border:1px solid var(--border);border-radius:20px;padding:22px;box-shadow:0 18px 50px rgba(0,0,0,.18);transition:background .35s ease,border-color .35s ease}.server-card.status-online{background:linear-gradient(160deg,rgba(18,45,32,.98),rgba(10,27,20,.98));border-color:#244b38}.server-card.status-offline{background:linear-gradient(160deg,rgba(67,25,28,.98),rgba(28,12,15,.98));border-color:#713136}.server-card.status-maintenance{background:linear-gradient(160deg,rgba(73,48,15,.98),rgba(30,21,10,.98));border-color:#8a6424}
+.card-top{display:flex;align-items:center;gap:14px;margin-bottom:18px}.server-logo{flex:0 0 58px;width:58px;height:58px;object-fit:contain;border-radius:14px;background:#071a11;border:1px solid #2a513c;padding:5px}.server-name{min-width:0;flex:1}h2{margin:0;font-size:1.15rem;overflow-wrap:anywhere}.address{color:var(--muted);font-size:.85rem;margin-top:5px;overflow-wrap:anywhere}
+.pill{display:inline-flex;align-items:center;gap:7px;width:fit-content;border-radius:999px;padding:6px 10px;font-size:.72rem;font-weight:800;letter-spacing:.06em;white-space:nowrap;border:1px solid transparent}.pill:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}.pill.online{color:var(--green);background:var(--green-bg);border-color:#276440}.pill.offline{color:var(--red);background:var(--red-bg);border-color:#713136}.pill.maintenance{color:var(--yellow);background:var(--yellow-bg);border-color:#786322}
+.status-line{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px}.status-title{font-size:1.06rem;font-weight:750}.updated{color:var(--muted);font-size:.78rem;text-align:right}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 15px}.stat{background:rgba(3,15,10,.42);border:1px solid rgba(63,108,81,.35);border-radius:12px;padding:12px;min-width:0}.stat-label{color:var(--muted);font-size:.75rem;margin-bottom:5px}.stat-value{font-size:1.05rem;font-weight:750;overflow-wrap:anywhere}
+.motd{border:1px solid rgba(63,108,81,.35);background:rgba(3,15,10,.35);border-radius:12px;padding:13px;min-height:72px;margin-bottom:15px}.motd-label{color:var(--muted);font-size:.75rem;margin-bottom:7px}.motd-text{font-size:.9rem;line-height:1.5;overflow-wrap:anywhere;white-space:pre-wrap}.card-footer{display:flex;align-items:center;justify-content:space-between;gap:12px}.error{color:#fca5a5;font-size:.8rem;line-height:1.4}
+button{appearance:none;border:1px solid #34734c;background:#17452b;color:#eaffef;border-radius:10px;padding:10px 14px;font:inherit;font-size:.85rem;font-weight:750;cursor:pointer;transition:background .15s ease,transform .15s ease}button:hover{background:#205a37}button:active{transform:translateY(1px)}button:disabled{opacity:.6;cursor:wait}.page-note{margin:22px 2px 0;color:var(--muted);font-size:.82rem;line-height:1.6}
+@media(max-width:720px){.shell{padding-top:24px}.server-grid{grid-template-columns:1fr}.server-card{padding:18px}}@media(max-width:390px){.status-line{align-items:flex-start;flex-direction:column}.updated{text-align:left}.card-top{align-items:flex-start}}
+</style>
 </head>
-
 <body>
-  <main>
-    <header class="brand">
-      <img class="logo" id="serverLogo" src="./logo.png" alt="SMPea logo">
-      <div>
-        <h1>SMPea</h1>
-        <p class="sub">SMPea Server Status</p>
-      </div>
-    </header>
-
-    <section class="card" aria-live="polite">
-      <div class="statusline">
-        <div>
-          <div class="statuslabel">Current status</div>
-          <strong id="statusText">Checking server…</strong>
-        </div>
-        <span id="pill" class="pill">CHECKING</span>
-      </div>
-
-      <div class="stats">
-        <div class="stat">
-          <span>Players online</span>
-          <strong id="players">—</strong>
-        </div>
-        <div class="stat">
-          <span>Version</span>
-          <strong id="version">—</strong>
-        </div>
-        <div class="stat">
-          <span>Latency</span>
-          <strong id="latency">—</strong>
-        </div>
-      </div>
-
-      <div class="statuslabel" style="margin-bottom:7px">Server message</div>
-      <div class="motd" id="motd">Waiting for status…</div>
-
-      <div class="footer">
-        <span id="updated">Not checked yet</span>
-        <button id="refresh" type="button">Refresh status</button>
-      </div>
-    </section>
-
-    <p class="sub" style="text-align:center;font-size:.85rem;margin-top:16px">
-      Status refreshes automatically every 30 seconds.
-    </p>
-  </main>
-
-  <script>
-    const el = id => document.getElementById(id);
-
-    const API =
-      "https://api.mcstatus.io/v2/status/java/spectral-meat.tun.ply.gg:11040";
-
-    const DEFAULT_LOGO = "./logo.png";
-    const EVENT_LOGO = "./repair.png";
-    const SPECIAL_MOTD_LINE = "Server is under repairs!";
-
-    function safeText(value, fallback = "—") {
-      return value === null || value === undefined || value === ""
-        ? fallback
-        : String(value);
-    }
-
-    // Strip Minecraft formatting codes before comparing text.
-    function cleanMinecraftText(value) {
-      return String(value ?? "")
-        .replace(/§[0-9a-fk-or]/gi, "")
-        .replace(/&[0-9a-fk-or]/gi, "")
-        .trim();
-    }
-
-    function updateLogo(motd, maintenance) {
-      const logo = el("serverLogo");
-      const newSrc = maintenance ? EVENT_LOGO : DEFAULT_LOGO;
-
-      if (logo.getAttribute("src") !== newSrc) {
-        logo.onerror = () => {
-          logo.onerror = null;
-          if (newSrc !== DEFAULT_LOGO) {
-            logo.src = DEFAULT_LOGO;
-          }
-        };
-        logo.src = newSrc;
-      }
-    }
-
-    async function refreshStatus() {
-      const button = el("refresh");
-      button.disabled = true;
-
-      try {
-        const response = await fetch(
-          `${API}?_=${Date.now()}`,
-          { cache: "no-store" }
-        );
-
-        if (!response.ok) {
-          throw new Error(`API returned HTTP ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log("SMPea API response:", data);
-
-        const online = data.online === true;
-
-        const playersOnline = data.players?.online ?? 0;
-        const playersMax = data.players?.max ?? "—";
-
-        const version =
-          data.version?.name_clean ??
-          data.version?.name ??
-          "Unknown";
-
-        const latency = data.latency ?? null;
-
-        const rawMotd =
-          data.motd?.clean ??
-          data.motd?.raw ??
-          "";
-
-        const motd = Array.isArray(rawMotd)
-          ? rawMotd.join("\n")
-          : String(rawMotd);
-
-        // Compare the visible MOTD text, ignoring formatting codes.
-        const lines = cleanMinecraftText(motd)
-          .split(/\r?\n/)
-          .map(line => line.trim());
-
-        const maintenanceLine =
-          cleanMinecraftText(SPECIAL_MOTD_LINE);
-
-        const maintenance = lines.some(
-          line => line === maintenanceLine
-        );
-
-        const pill = el("pill");
-
-        if (maintenance && online) {
-          // Maintenance takes priority over normal ONLINE status.
-          pill.className = "pill maintenance";
-          pill.textContent = "MAINTENANCE";
-
-          el("statusText").textContent =
-            "This Server Is Under Repairs";
-
-          el("motd").textContent = motd;
-
-        } else if (online) {
-          pill.className = "pill online";
-          pill.textContent = "ONLINE";
-
-          el("statusText").textContent =
-            "Server is reachable";
-
-          el("motd").textContent =
-            safeText(motd, "No server message");
-
-        } else {
-          pill.className = "pill offline";
-          pill.textContent = "OFFLINE";
-
-          el("statusText").textContent =
-            "Server is offline or unreachable";
-
-          el("motd").textContent =
-            "The server may be stopped or temporarily unreachable.";
-        }
-
-        el("players").textContent =
-          online ? `${playersOnline} / ${playersMax}` : "0 / —";
-
-        el("version").textContent =
-          online ? safeText(version) : "—";
-
-        el("latency").textContent =
-          online && latency !== null ? `${latency} ms` : "—";
-
-        updateLogo(motd, maintenance && online);
-
-        el("updated").textContent =
-          "Last checked: " + new Date().toLocaleTimeString();
-
-      } catch (error) {
-        console.error("SMPea status error:", error);
-
-        el("statusText").textContent = "Status check failed";
-        el("pill").className = "pill offline";
-        el("pill").textContent = "ERROR";
-        el("motd").textContent =
-          "Could not retrieve status. Check the API and browser console.";
-
-        // A failed request is not proof that maintenance is active.
-        updateLogo("", false);
-
-        el("updated").textContent =
-          "Failed at: " + new Date().toLocaleTimeString();
-
-      } finally {
-        button.disabled = false;
-      }
-    }
-
-    el("refresh").addEventListener("click", refreshStatus);
-    refreshStatus();
-    setInterval(refreshStatus, 30000);
-  </script>
+<main class="shell">
+<header><img class="brand-logo" src="./logo.png" alt="SMPea logo" onerror="this.style.display='none'"><div><h1>SMPea Server Status</h1><p class="subtitle">Live status for both Minecraft servers</p></div></header>
+<section class="server-grid" aria-label="Minecraft server status cards">
+<article class="server-card status-checking" id="server-card-1" aria-labelledby="server-name-1">
+<div class="card-top"><img class="server-logo" id="logo-1" src="./logo.png" alt="SMPea server logo"><div class="server-name"><h2 id="server-name-1">SMPea Server 1</h2><div class="address">spectral-meat.tun.ply.gg:11040</div></div></div>
+<div class="status-line"><div class="status-title" id="status-title-1" aria-live="polite">Checking status…</div><span class="pill offline" id="pill-1">CHECKING</span></div>
+<div class="stats"><div class="stat"><div class="stat-label">Players</div><div class="stat-value" id="players-1">—</div></div><div class="stat"><div class="stat-label">Version</div><div class="stat-value" id="version-1">—</div></div><div class="stat"><div class="stat-label">Latency</div><div class="stat-value" id="latency-1">—</div></div><div class="stat"><div class="stat-label">Connection</div><div class="stat-value" id="connection-1">Checking</div></div></div>
+<div class="motd"><div class="motd-label">Message of the Day</div><div class="motd-text" id="motd-1">Waiting for server response…</div></div><div class="card-footer"><span class="updated" id="updated-1">Not checked yet</span><button type="button" id="refresh-1">Refresh server 1</button></div><div class="error" id="error-1" role="status" hidden></div>
+</article>
+<article class="server-card status-checking" id="server-card-2" aria-labelledby="server-name-2">
+<div class="card-top"><img class="server-logo" id="logo-2" src="./logo.png" alt="SMPea Aternos logo"><div class="server-name"><h2 id="server-name-2">SMPea Aternos</h2><div class="address">somegooseting.aternos.me:38204</div></div></div>
+<div class="status-line"><div class="status-title" id="status-title-2" aria-live="polite">Checking status…</div><span class="pill offline" id="pill-2">CHECKING</span></div>
+<div class="stats"><div class="stat"><div class="stat-label">Players</div><div class="stat-value" id="players-2">—</div></div><div class="stat"><div class="stat-label">Version</div><div class="stat-value" id="version-2">—</div></div><div class="stat"><div class="stat-label">Latency</div><div class="stat-value" id="latency-2">—</div></div><div class="stat"><div class="stat-label">Connection</div><div class="stat-value" id="connection-2">Checking</div></div></div>
+<div class="motd"><div class="motd-label">Message of the Day</div><div class="motd-text" id="motd-2">Waiting for server response…</div></div><div class="card-footer"><span class="updated" id="updated-2">Not checked yet</span><button type="button" id="refresh-2">Refresh Aternos</button></div><div class="error" id="error-2" role="status" hidden></div>
+</article>
+</section>
+<p class="page-note">Each card checks and refreshes independently. Status is provided by mcstatus.io. Aternos servers may appear offline while stopped or still starting.</p>
+</main>
+<script>
+const SERVERS=[
+{id:1,name:"SMPea Server 1",host:"spectral-meat.tun.ply.gg",port:11040,logo:"./logo.png",maintenanceLogo:"./repair.png",maintenanceMotd:"Server is under repairs!"},
+{id:2,name:"SMPea Aternos",host:"somegooseting.aternos.me",port:38204,logo:"./logo.png",maintenanceLogo:"./repair.png",maintenanceMotd:"Server is under repairs!"}
+];
+function cleanMinecraftText(value){return String(value??"").replace(/§[0-9a-fk-or]/gi,"").replace(/&[0-9a-fk-or]/gi,"").replace(/<[^>]*>/g,"").trim()}
+function getMotd(data){const value=data?.motd?.clean??data?.motd?.raw??data?.motd?.html??"";return Array.isArray(value)?value.map(cleanMinecraftText).join("\n"):cleanMinecraftText(value)}
+function isMaintenance(motd,expected){const lines=cleanMinecraftText(motd).split(/\r?\n/).map(s=>s.trim().toLowerCase()).filter(Boolean);return lines.some(s=>s===cleanMinecraftText(expected).toLowerCase())}
+function setText(id,value){document.getElementById(id).textContent=value}
+function setPill(id,label,state){const el=document.getElementById(id);el.textContent=label;el.className="pill "+state}
+function setCardStatus(server,state){const card=document.getElementById(`server-card-${server.id}`);card.classList.remove("status-checking","status-online","status-offline","status-maintenance");card.classList.add(`status-${state}`)}
+function renderOffline(server,message){setCardStatus(server,"offline");setText(`status-title-${server.id}`,"Server is offline or unreachable");setPill(`pill-${server.id}`,"OFFLINE","offline");setText(`players-${server.id}`,"—");setText(`version-${server.id}`,"—");setText(`latency-${server.id}`,"—");setText(`connection-${server.id}`,"Offline");setText(`motd-${server.id}`,"No response from the server.");const err=document.getElementById(`error-${server.id}`);err.textContent=message||"";err.hidden=!message;document.getElementById(`logo-${server.id}`).src=server.logo}
+async function refreshServer(server){const button=document.getElementById(`refresh-${server.id}`),error=document.getElementById(`error-${server.id}`);button.disabled=true;button.textContent="Refreshing…";error.hidden=true;error.textContent="";setText(`connection-${server.id}`,"Checking");try{const url=`https://api.mcstatus.io/v2/status/java/${encodeURIComponent(server.host)}:${server.port}?_=${Date.now()}`;const response=await fetch(url,{cache:"no-store"});if(!response.ok)throw new Error(`Status API returned HTTP ${response.status}`);const data=await response.json();if(!data.online){renderOffline(server,"")}else{const motd=getMotd(data),maintenance=isMaintenance(motd,server.maintenanceMotd),players=Number(data.players?.online??0),max=data.players?.max,version=data.version?.name_clean||data.version?.name||"Unknown",latency=Number.isFinite(data.latency)?`${Math.round(data.latency)} ms`:"—";setCardStatus(server,maintenance?"maintenance":"online");setText(`status-title-${server.id}`,maintenance?"This Server Is Under Repairs":"Server is online");setPill(`pill-${server.id}`,maintenance?"MAINTENANCE":"ONLINE",maintenance?"maintenance":"online");setText(`players-${server.id}`,`${players} / ${max??"?"}`);setText(`version-${server.id}`,version);setText(`latency-${server.id}`,latency);setText(`connection-${server.id}`,maintenance?"Maintenance":"Online");setText(`motd-${server.id}`,motd||"No MOTD provided.");document.getElementById(`logo-${server.id}`).src=maintenance?server.maintenanceLogo:server.logo}setText(`updated-${server.id}`,`Updated ${new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"})}`)}catch(err){renderOffline(server,`Could not retrieve status: ${err.message}.`);setText(`updated-${server.id}`,`Check failed at ${new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit",second:"2-digit"})}`)}finally{button.disabled=false;button.textContent=server.id===1?"Refresh server 1":"Refresh Aternos"}}
+for(const server of SERVERS){document.getElementById(`refresh-${server.id}`).addEventListener("click",()=>refreshServer(server));refreshServer(server);window.setInterval(()=>refreshServer(server),30000)}
+</script>
 </body>
 </html>
