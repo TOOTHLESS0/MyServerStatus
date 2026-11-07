@@ -52,7 +52,14 @@ h1{font-size:clamp(1.7rem,4vw,2.4rem);line-height:1.1;margin:0;letter-spacing:-.
 <p class="page-note">Status is provided by mcstatus.io and refreshes automatically every 30 seconds.</p>
 </main>
 <script>
-const SERVER={id:1,host:"chords-tony.tun.ply.gg",port:11040,logo:"./server-icon.png",maintenanceLogo:"./repair.png",maintenanceMotd:"Server is under repairs!"};
+const SERVER = {
+  id: 1,
+  host: "chords-tony.tun.ply.gg",
+  port: 11040,
+  logo: "./server-icon.png",
+  maintenanceLogo: "./repair.png",
+  maintenanceMotd: "Server is under repairs!"
+};
 function cleanMinecraftText(value){return String(value??"").replace(/§[0-9a-fk-or]/gi,"").replace(/&[0-9a-fk-or]/gi,"").replace(/<[^>]*>/g,"").trim()}
 function getMotd(data){const value=data?.motd?.clean??data?.motd?.raw??data?.motd?.html??"";return Array.isArray(value)?value.map(cleanMinecraftText).join("\n"):cleanMinecraftText(value)}
 function isMaintenance(motd,expected){return cleanMinecraftText(motd).split(/\r?\n/).some(line=>line.trim().toLowerCase()===cleanMinecraftText(expected).toLowerCase())}
